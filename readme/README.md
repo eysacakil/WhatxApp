@@ -31,7 +31,7 @@ WhatxApp
 
 1.[**Proje Planı:**](plan.png)
 
-2.[**Gereksinim Analizi:**](gereksinimAnalizi)
+2.[**Gereksinim Analizi:**](gereksinimAnalizi.md)
 
 3.[**Durum Diagramı:**](durumDiagrami.png)
 
