@@ -23,7 +23,7 @@ WhatxApp
 ## Proje Ekibi:
 
 - Eysa Dilber Çakıl
-- [Muhammet Can Şimşek](UseCaseSablon.pdf)
+- Muhammet Can Şimşek
 
 ## Proje Planı:
 
@@ -32,3 +32,6 @@ Proje planını [buradan](plan.png) inceleyebilirsiniz.
 ## Gereksinim Analizi:
 
 Gereksinim analizine [buradan](gereksinimAnalizi) ulaşabilirsiniz.
+
+## Durum Senaryolari:
+- [Muhammet Can Şimşek](UseCaseSablon.pdf)
