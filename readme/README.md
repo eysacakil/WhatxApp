@@ -25,10 +25,24 @@ WhatxApp
 - Eysa Dilber Çakıl
 - Muhammet Can Şimşek
 
-## Proje Planı:
 
-Proje planını [buradan](plan.png) inceleyebilirsiniz.
+###
 
-## Gereksinim Analizi:
 
-Gereksinim analizine [buradan](gereksinimAnalizi) ulaşabilirsiniz.
+1.[**Proje Planı:**](plan.png)
+
+2.[**Gereksinim Analizi:**](gereksinimAnalizi)
+
+3.[**Durum Diagramı:**](durumDiagrami.png)
+
+4.[**Durum Senaryoları:**](durumSenaryolari.md)
+
+5.[**Veritabanı Diagramı:**](veritabaniDiagrami.png)
+
+6.**Front-End:**
+
+7.**Back-End:**
+
+8.**Test:**
+
+9.**Geliştirici ve Kullanıcı Dökümantasyonları:**
