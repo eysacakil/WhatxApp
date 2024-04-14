@@ -35,3 +35,6 @@ Gereksinim analizine [buradan](gereksinimAnalizi.md) ulaşabilirsiniz.
 
 ## Durum Senaryolari:
 - [Muhammet Can Şimşek](UseCaseSablon.pdf)
+
+## Veritabani diyagrami:
+![Database Diagram](DBdiagram.png)
