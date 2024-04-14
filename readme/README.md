@@ -23,7 +23,7 @@ WhatxApp
 ## Proje Ekibi:
 
 - Eysa Dilber Çakıl
-- Muhammet Can Şimşek
+- [Muhammet Can Şimşek](UseCaseSablon.pdf)
 
 ## Proje Planı:
 
