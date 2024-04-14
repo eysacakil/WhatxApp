@@ -31,7 +31,7 @@ Proje planını [buradan](plan.png) inceleyebilirsiniz.
 
 ## Gereksinim Analizi:
 
-Gereksinim analizine [buradan](gereksinimAnalizi) ulaşabilirsiniz.
+Gereksinim analizine [buradan](gereksinimAnalizi.md) ulaşabilirsiniz.
 
 ## Durum Senaryolari:
 - [Muhammet Can Şimşek](UseCaseSablon.pdf)
