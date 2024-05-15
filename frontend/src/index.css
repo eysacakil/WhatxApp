@@ -1,0 +1,217 @@
+/* tailwindcss */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* font --> Roboto */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/*all*/
+*{
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+html{
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  overflow: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  height: 100%;
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* ancher tag */
+a, a:hover, a:focus, a:active {
+  color: inherit;
+  text-decoration: none;;
+}
+
+/* media queries */
+/* >=768px */
+@media screen and (min-widht:768px) {
+  html{
+    font-size: 110%;
+  }
+}
+
+
+/* Genel Stiller */
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* Üst Menü Çubuğu */
+.top-menu {
+  background-color: #075e54;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-menu .profile-photo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.top-menu .search-bar {
+  flex: 1;
+  margin: 0 10px;
+  padding: 8px;
+  border-radius: 20px;
+  border: none;
+  background-color: #128c7e;
+  color: white;
+}
+
+.top-menu .search-bar::placeholder {
+  color: white;
+}
+
+/* Sol Taraftaki Yan Menü */
+.sidebar {
+  width: 250px;
+  background-color: #128c7e;
+  color: white;
+  padding: 10px 0;
+}
+
+.sidebar h2 {
+  padding: 10px;
+}
+
+.sidebar .chat-list {
+  overflow-y: auto;
+  height: calc(100vh - 100px);
+}
+
+.sidebar .chat-item {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.sidebar .chat-item:hover {
+  background-color: #075e54;
+}
+
+.sidebar .chat-item.active {
+  background-color: #075e54;
+}
+
+.sidebar .chat-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.sidebar .chat-item .chat-info {
+  flex: 1;
+}
+
+.sidebar .chat-item .chat-info .chat-name {
+  font-weight: bold;
+}
+
+/* Ana Sohbet Alanı */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.main-content .chat-container {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+}
+
+.main-content .chat-container .chat-box {
+  flex: 1;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.main-content .chat-container .chat-box .messages {
+  overflow-y: auto;
+  height: calc(100vh - 200px);
+}
+
+.main-content .chat-container .chat-box .messages .message {
+  margin-bottom: 20px;
+}
+
+.main-content .chat-container .chat-box .messages .message:last-child {
+  margin-bottom: 0;
+}
+
+.main-content .chat-container .chat-box .messages .message.sent {
+  text-align: right;
+}
+
+.main-content .chat-container .chat-box .messages .message.received {
+  text-align: left;
+}
+
+.main-content .chat-container .chat-box .messages .message .message-content {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.main-content .chat-container .chat-box .messages .message.sent .message-content {
+  background-color: #dcf8c6;
+}
+
+.main-content .chat-container .chat-box .messages .message.received .message-content {
+  background-color: #ffffff;
+}
+
+.main-content .chat-container .message-input {
+  margin-top: 20px;
+  display: flex;
+}
+
+.main-content .chat-container .message-input textarea {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #128c7e;
+}
+
+.main-content .chat-container .message-input button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  background-color: #128c7e;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.main-content .chat-container .message-input button:hover {
+  background-color: #075e54;
+}
