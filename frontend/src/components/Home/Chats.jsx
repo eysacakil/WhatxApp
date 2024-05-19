@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from 'react';
 import Chat from './Chat';
-import { chatsData } from  '../data/whatsapp';
+import { chatsData } from  '../../data/whatsapp';
 
 function Chats({ filter, searchText }) {
     const [ chats, setChats ] = useState(chatsData);

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import RoundedBtn from "./Common/RoundedBtn";
-import { messagesData } from "../data/whatsapp";
+import { messagesData } from "../../data/whatsapp";
 import { MdSearch, MdSend } from "react-icons/md";
 import { HiDotsVertical } from "react-icons/hi";
-import { cs1 } from "../assets/whatsapp";
+import { cs1 } from "../../assets/whatsapp";
 import { BiHappy } from "react-icons/bi";
 import { AiOutlinePaperClip } from "react-icons/ai";
 import { BsFillMicFill } from "react-icons/bs";
@@ -11,6 +11,7 @@ import { ReceivedMessage, SentMessage } from './Messages';
 
 function ChatDetails() {
   const [messages, setMessages] = useState(messagesData);
+
   return (
     <div className="flex flex-col h-screen">
       {/* Header Section */}
@@ -40,13 +41,23 @@ function ChatDetails() {
         style={{ padding: "12px 7%" }}
       >
         {/* Chat messages will go here */}
-        {messages.map((message, index) =>
-          message.isReceived ? (
-            <ReceivedMessage key={index} message={message.message} />
-          ) : (
-            <SentMessage key={index} message={message.message} />
-          )
-        )}
+        {messages.map((message, index) => {
+          if (message.isReceived) {
+            switch (message.type) {
+              case 'text':
+                return <ReceivedMessage key={index} message={message} />;
+              default:
+                return null;
+            }
+          } else {
+            switch (message.type) {
+              case 'text':
+                return <SentMessage key={index} message={message} />;
+              default:
+                return null;
+            }
+          }
+        })}
       </div>
 
       {/* Message Input Section */}

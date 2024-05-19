@@ -5,7 +5,7 @@ import { TbCircleDashed } from "react-icons/tb";
 import { BsFillChatLeftTextFill } from "react-icons/bs";
 import { HiDotsVertical } from "react-icons/hi";
 import { BiFilter } from "react-icons/bi";
-import { pp } from "../assets/whatsapp";
+import { pp } from "../../assets/whatsapp";
 import Chats from "./Chats";
 
 function LeftMenu() {
