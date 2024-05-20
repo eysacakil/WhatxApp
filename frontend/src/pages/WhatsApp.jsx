@@ -1,47 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import LeftMenu from '../components//Home/LeftMenu';
-import ChatDetails from '../components/Home/ChatDetails';
-import LoadingScreen from '../components/Home/LoadingScreen';
+import React, { useState, useEffect } from "react";
+import LeftMenu from "../components/Home/LeftMenu";
+import ChatDetail from "../components/Home/ChatDetails";
+import LoadingScreen from "../components/Home/LoadingScreen";
 
-function WhatxApp() {
+function WhatsApp() {
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Progress bar simulation
-    const interval = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress >= 100) {
-          clearInterval(interval);
-          setLoading(false);
-          return 100;
-        }
-        const increment = Math.floor(Math.random() * 10 + 1) + 3;
-        return Math.min(oldProgress + increment, 100);
-      });
-    }, 300); // Update every 300ms
+    const id = setTimeout(() => {
+      if (progress >= 100) setLoading(false);
+      else {
+        const increment = Math.floor(Math.random() * (10 + 1)) + 7;
+        setProgress(progress + increment);
+      }
+    }, 300);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+    return () => clearTimeout(id);
+  }, [progress]);
 
   return (
     <>
-      {/* Loading Screen */}
       {loading ? (
         <LoadingScreen progress={progress} />
       ) : (
+        // main app container
         <div className="w-screen h-screen overflow-hidden">
-          {/* 2 components container */}
+          {/* 2 components cointainer */}
           <div className="flex justify-start whatsapp-bp:justify-center items-center bg-[#111a21] h-screen">
-            {/* left menu */}
-            <div className="bg-[#111a21] min-w-[340px] max-w-[500px] w-full h-full">
+            {/* LeftMenu */}
+            <div className="bg-[#111a21] min-w-[340px] max-w-[500px] w-100 h-100">
               <LeftMenu />
             </div>
-            {/* chat details */}
-            <div className="bg-[#222f35] min-w-[415px] max-w-[1120px] w-full h-full">
-              <ChatDetails />
+
+            {/* ChatDetail */}
+            <div className="bg-[#222f35] min-w-[415px] max-w-[1120px] w-100 h-100">
+              <ChatDetail />
             </div>
           </div>
         </div>
@@ -50,4 +44,4 @@ function WhatxApp() {
   );
 }
 
-export default WhatxApp;
+export default WhatsApp;
