@@ -1,40 +1,43 @@
 import React, { useState } from 'react';
+import axios from '../../axiosConfig';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (!username || !password) {
-      setErrorMessage('Kullanıcı adı ve şifre boş bırakılamaz.');
+    if (!email || !password) {
+      setErrorMessage('E-posta ve şifre boş bırakılamaz.');
     } else if (password.length < 8) {
       setErrorMessage('Şifre en az 8 karakter olmalıdır.');
     } else {
-      // Burada giriş işlemleri gerçekleştirilir.
-      // Örneğin, bir API'ye istek gönderilebilir.
-      console.log('Kullanıcı adı:', username);
-      console.log('Şifre:', password);
-      // Başarılı giriş durumunda yönlendirme yapılır.
-      navigate('/');
+      try {
+        const response = await axios.post('/api/auth/login', { email, password });
+        console.log('Login successful', response.data);
+        navigate('/home');  // Başarılı giriş sonrası yönlendirme
+      } catch (error) {
+        console.error('Error logging in', error);
+        setErrorMessage('Giriş sırasında bir hata oluştu.');
+      }
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">
-      <form className="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded shadow-md" onSubmit={handleSubmit}>
+      <form className="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded shadow-md" onSubmit={handleLogin}>
         <h2 className="text-2xl font-bold text-center text-green-400">Giriş Yap</h2>
         <div>
-          <label className="block text-sm font-medium text-gray-300">Kullanıcı Adı</label>
+          <label className="block text-sm font-medium text-gray-300">E-posta</label>
           <input
             className="w-full p-2 mt-1 border border-gray-600 rounded focus:ring focus:ring-green-400 bg-gray-700 text-gray-200"
-            type="text"
-            placeholder="Kullanıcı adınızı girin"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            placeholder="E-posta adresinizi girin"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
         <div>

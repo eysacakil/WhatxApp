@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import axios from '../../axiosConfig';
 
 const Register = () => {
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
     username: '',
+    email: '',
     password: '',
     confirmPassword: '',
   });
@@ -26,6 +28,7 @@ const Register = () => {
     if (!form.firstName) newErrors.firstName = 'İsim gereklidir';
     if (!form.lastName) newErrors.lastName = 'Soyisim gereklidir';
     if (!form.username) newErrors.username = 'Kullanıcı adı gereklidir';
+    if (!form.email) newErrors.email = 'E-posta gereklidir';
     if (!form.password) newErrors.password = 'Şifre gereklidir';
     else if (form.password.length < 8) newErrors.password = 'Şifre en az 8 karakter olmalıdır';
     if (form.password !== form.confirmPassword) newErrors.confirmPassword = 'Şifreler eşleşmiyor';
@@ -35,14 +38,24 @@ const Register = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
-      console.log('Form submitted:', form);
-      // Kayıt işlemini burada gerçekleştireceğiz
-
-      setRedirect(true);
+      try {
+        const response = await axios.post('/api/users/register', {
+          firstName: form.firstName,
+          lastName: form.lastName,
+          username: form.username,
+          email: form.email,
+          password: form.password,
+        });
+        console.log('Registration successful', response.data);
+        setRedirect(true);
+      } catch (error) {
+        console.error('Error registering user', error);
+        setErrors({ apiError: 'Kayıt sırasında bir hata oluştu' });
+      }
     }
   };
 
@@ -89,6 +102,17 @@ const Register = () => {
             {errors.username && <p className="text-sm text-red-600">{errors.username}</p>}
           </div>
           <div>
+            <label className="block text-sm font-medium text-gray-300">E-posta</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full p-2 mt-1 border border-gray-600 rounded focus:ring focus:ring-green-400 bg-gray-700 text-gray-200"
+            />
+            {errors.email && <p className="text-sm text-red-600">{errors.email}</p>}
+          </div>
+          <div>
             <label className="block text-sm font-medium text-gray-300">Şifre</label>
             <input
               type="password"
@@ -110,6 +134,7 @@ const Register = () => {
             />
             {errors.confirmPassword && <p className="text-sm text-red-600">{errors.confirmPassword}</p>}
           </div>
+          {errors.apiError && <p className="text-sm text-red-600">{errors.apiError}</p>}
           <button
             type="submit"
             className="w-full px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700 focus:ring focus:ring-green-400"

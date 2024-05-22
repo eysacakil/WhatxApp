@@ -12,8 +12,9 @@ function App() {
     <ProfileProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<WhatsApp />} />
+          <Route path="/home" element={<WhatsApp />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile-update" element={<ProfileUpdate />} />
         </Routes>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProfile } from '../../contexts/ProfileContext';
+import axios from '../../axiosConfig';
 import Modal from 'react-modal';
 import defaultUser from '../../assets/default-user.svg'; // Yeni sembolü import edin
 
@@ -12,6 +13,7 @@ function ProfileUpdate() {
   const [lastName, setLastName] = useState(profile.lastName);
   const [profilePicture, setProfilePicture] = useState(profile.profilePicture);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleFirstNameChange = (e) => {
@@ -37,13 +39,24 @@ function ProfileUpdate() {
     setProfilePicture('');
   };
 
-  const handleSave = () => {
-    setProfile({ firstName, lastName, profilePicture });
-    setModalIsOpen(true);
-    setTimeout(() => {
-      setModalIsOpen(false);
-      navigate('/');
-    }, 2000);
+  const handleSave = async () => {
+    try {
+      const response = await axios.put('/api/profile/update', {
+        userId: profile._id,
+        firstName,
+        lastName,
+        profilePicture,
+      });
+      setProfile(response.data);
+      setModalIsOpen(true);
+      setTimeout(() => {
+        setModalIsOpen(false);
+        navigate('/home');
+      }, 2000);
+    } catch (error) {
+      console.error('Error updating profile', error);
+      setErrorMessage('Profil güncellenirken bir hata oluştu.');
+    }
   };
 
   return (
@@ -86,6 +99,7 @@ function ProfileUpdate() {
           onChange={handleLastNameChange}
           className='mb-4 p-2 rounded-md bg-[#3b4a54] text-white w-full'
         />
+        {errorMessage && <p className="text-sm text-red-600">{errorMessage}</p>}
         <button
           onClick={handleSave}
           className='bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-700'
