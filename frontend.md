@@ -5,26 +5,24 @@ Bu projede React çatısı kullanılmıştır.
 ## Geliştiriciler
 
 - **Muhammet Tasarımlar**:
-  - Profil Fotoğrafı Güncelle
-  - Profil Fotoğrafı Kaldır
-  - Profil Fotoğrafı Ekle
-  - Sohbet Oluşturma
   - Emoji Ekleme
   - Okundu Bildirimi
   - Sohbet Listesinde Filtreleme
   - Bildirim Filtreleme
-
-- **Eysa Tasarımları**:
-  - Giriş Yap
-  - Kayıt Ol
-  - Çıkış Yap
-  - Sohbet Arşivleme
   - Mesaj Gönderme
   - Mesaj Alımı
   - Mesaj Silme
   - Mesajlarda Arama
 
-## Kullanılan Teknolojiler
+- **Eysa Tasarımları**:
+  - Sohbet Oluşturma
+  - Profil Fotoğrafı Güncelle
+  - Profil Fotoğrafı Kaldır
+  - Profil Fotoğrafı Ekle
+  - Giriş Yap
+  - Kayıt Ol
+  - Çıkış Yap
+  - Sohbet Arşivleme
 
 
 ## Proje Kurulumu
