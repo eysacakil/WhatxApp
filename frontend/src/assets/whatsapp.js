@@ -14,6 +14,7 @@ import chat10 from "./images/chat10.png";
 import chat11 from "./images/chat11.png";
 import chat12 from "./images/chat12.png";
 import chat13 from "./images/chat13.png";
+export const emptyChatImage = 'https://i.gadgets360cdn.com/large/whatsapp_multi_device_support_update_image_1636207150180.jpg';
 
 export {
   pp,

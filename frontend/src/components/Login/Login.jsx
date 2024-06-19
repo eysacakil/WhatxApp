@@ -16,15 +16,26 @@ const Login = () => {
       setErrorMessage('Şifre en az 8 karakter olmalıdır.');
     } else {
       try {
-        const response = await axios.post('/api/auth/login', { email, password });
+        const response = await axios.post('http://127.0.0.1:5000/api/auth/login', { email, password });
         console.log('Login successful', response.data);
-        navigate('/home');  // Başarılı giriş sonrası yönlendirme
+
+        const { user } = response.data;
+        localStorage.setItem('user', JSON.stringify({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
+          email: user.email,
+          userId: user.userId
+        }));
+  
+        navigate('/home'); 
       } catch (error) {
         console.error('Error logging in', error);
         setErrorMessage('Giriş sırasında bir hata oluştu.');
       }
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900">

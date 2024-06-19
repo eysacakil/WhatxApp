@@ -43,7 +43,7 @@ const Register = () => {
 
     if (validateForm()) {
       try {
-        const response = await axios.post('/api/users/register', {
+        const response = await axios.post('http://127.0.0.1:5000/api/users/register', {
           firstName: form.firstName,
           lastName: form.lastName,
           username: form.username,

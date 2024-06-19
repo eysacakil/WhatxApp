@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import LeftMenu from "../components/Home/LeftMenu";
-import ChatDetail from "../components/Home/ChatDetails";
+import ChatDetails from "../components/Home/ChatDetails";
 import LoadingScreen from "../components/Home/LoadingScreen";
 
 function WhatsApp() {
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [selectedChat, setSelectedChat] = useState(null);
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -19,23 +20,22 @@ function WhatsApp() {
     return () => clearTimeout(id);
   }, [progress]);
 
+  const handleSelectChat = (chat) => {
+    setSelectedChat(chat);
+  };
+
   return (
     <>
       {loading ? (
         <LoadingScreen progress={progress} />
       ) : (
-        // main app container
         <div className="w-screen h-screen overflow-hidden">
-          {/* 2 components cointainer */}
           <div className="flex justify-start whatsapp-bp:justify-center items-center bg-[#111a21] h-screen">
-            {/* LeftMenu */}
             <div className="bg-[#111a21] min-w-[340px] max-w-[500px] w-100 h-100">
-              <LeftMenu />
+              <LeftMenu onSelectChat={handleSelectChat} />
             </div>
-
-            {/* ChatDetail */}
             <div className="bg-[#222f35] min-w-[415px] max-w-[1120px] w-100 h-100">
-              <ChatDetail />
+              <ChatDetails selectedChat={selectedChat} />
             </div>
           </div>
         </div>

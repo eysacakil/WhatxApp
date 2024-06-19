@@ -10,7 +10,7 @@ import { BiFilter } from "react-icons/bi";
 import Chats from "../Home/Chats";
 import defaultUser from '../../assets/default-user.svg'; // Yeni sembolü import edin
 
-function LeftMenu() {
+function LeftMenu({ onSelectChat }) {
   const [searchText, setSearchText] = useState('');
   const [filter, setFilter] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -66,10 +66,9 @@ function LeftMenu() {
           <BiFilter />
         </button>
       </div>
-      <Chats filter={filter} searchText={searchText} />
+      <Chats filter={filter} searchText={searchText} onSelectChat={onSelectChat} />
     </div>
   );
 }
 
 export default LeftMenu;
-    
