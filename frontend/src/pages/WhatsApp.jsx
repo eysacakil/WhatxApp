@@ -17,6 +17,7 @@ function WhatsApp() {
       }
     }, 300);
 
+    if(selectedChat) console.log(selectedChat);
     return () => clearTimeout(id);
   }, [progress]);
 

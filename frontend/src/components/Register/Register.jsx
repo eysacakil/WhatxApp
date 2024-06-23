@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import axios from '../../axiosConfig';
 
 const Register = () => {
@@ -141,6 +141,7 @@ const Register = () => {
           >
             Kayıt Ol
           </button>
+         
         </form>
       </div>
     </div>
