@@ -8,10 +8,15 @@ import { AiOutlinePaperClip } from "react-icons/ai";
 import { BsFillMicFill } from "react-icons/bs";
 import EmptyChat from "./EmptyChat";
 import { getTime } from "../../logic/whatsapp";
+import { FaTrash } from "react-icons/fa";
 
 function ChatDetails({ selectedChat }) {
   const [inputMessage, setInputMessage] = useState("");
+  const [isActive, setIsActive] = useState(false);
+  const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
+  const [typingTimeout, setTypingTimeout] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
 
   const getChatDetails = async () => {
     try {
@@ -79,6 +84,33 @@ function ChatDetails({ selectedChat }) {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setText(e.target.value);
+
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+
+    setTypingTimeout(
+      setTimeout(() => {
+        const searchText = e.target.value.toLowerCase();
+        const filteredMessages = messages.filter(message =>
+          message.msg.toLowerCase().includes(searchText)
+        );
+        setSearchResults(filteredMessages);
+      }, 500) // 500ms bekler
+    );
+  }
+
+  const handleDeleteMessage = async (messageId) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/messages/${messageId}`);
+      setMessages(messages.filter(message => message.messageId !== messageId));
+    } catch (error) {
+      console.error("Error deleting message", error);
+    }
+  };
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSendMessage();
@@ -89,6 +121,7 @@ function ChatDetails({ selectedChat }) {
     return <EmptyChat />;
   }
 
+  const displayedMessages = text.trim() ? searchResults : messages;
   return (
     <div className="flex flex-col h-screen">
       {/* Header Section */}
@@ -109,7 +142,20 @@ function ChatDetails({ selectedChat }) {
         </div>
         {/* Search and Options Buttons */}
         <div className="flex justify-end items-center w-[85px]">
-          <RoundedBtn icon={<MdSearch />} />
+          {
+            !isActive ? (
+              <RoundedBtn onClick={() => setIsActive(true)} icon={<MdSearch />} />
+            ) : (
+              <input
+                type="text"
+                value={text}
+                onChange={handleSearchChange}
+                placeholder="Search"
+                className="bg-[#0a131a] rounded-md px-2 py-1 text-white border-none outline-none"
+                onBlur={() => setIsActive(false)}
+              />
+            )
+          }
           <RoundedBtn icon={<HiDotsVertical />} />
         </div>
       </div>
@@ -119,8 +165,8 @@ function ChatDetails({ selectedChat }) {
         className="bg-[#0a131a] bg-[url('assets/images/bg.webp')] bg-contain flex flex-col overflow-y-scroll h-full"
         style={{ padding: "12px 2%" }}
       >
-        {messages && messages.length > 0 ? (
-          messages.map((message, index) => (
+       {displayedMessages && displayedMessages.length > 0 ? (
+          displayedMessages.map((message, index) => (
             <div
               key={index}
               className={`mb-2 p-2 rounded-lg inline-block max-w-[75%] min-w-[10%] ${
@@ -135,10 +181,20 @@ function ChatDetails({ selectedChat }) {
               <div className="flex justify-end text-xs text-[#8796a1] mt-1">
                 {getTime(message.time)}
               </div>
+              {message.sender === "me" && (
+                <button
+                  className="text-red-500 ml-2"
+                  onClick={() => handleDeleteMessage(message.messageId)}
+                >
+                  <FaTrash />
+                </button>
+              )}
             </div>
           ))
         ) : (
-          <div className="text-white"></div>
+          <div className="text-white">
+            No messages yet
+          </div>
         )}
       </div>
 

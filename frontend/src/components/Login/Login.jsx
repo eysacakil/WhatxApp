@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from '../../axiosConfig';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -68,17 +68,6 @@ const Login = () => {
         >
           Giriş Yap
         </button>
-
-        <Link to="/register" className="block text-sm text-center text-green-400">
-        <button
-          className="w-full px-4 py-2 text-blue-200 bg-slate-600 rounded-md"
-          type="submit"
-        >
-          Kayıt Ol
-        </button>
-        </Link>
-      
-
       </form>
     </div>
   );
