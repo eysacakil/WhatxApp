@@ -8,6 +8,10 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
+  const handleRegisterRedirect = () => {
+    navigate('/register');
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -67,6 +71,14 @@ const Login = () => {
           type="submit"
         >
           Giriş Yap
+        </button>
+
+        <button
+          onClick={handleRegisterRedirect}
+          className="w-full px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700 focus:ring focus:ring-green-400"
+          type="submit"
+        >
+          Kayıt Ol
         </button>
       </form>
     </div>
