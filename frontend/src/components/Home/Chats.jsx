@@ -14,10 +14,10 @@ function Chats({ filter, searchText, onSelectChat }) {
       const user = JSON.parse(localStorage.getItem('user')); // localStorage'dan kullanıcıyı al
       if (user && user.userId) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/messages/${user.userId}/users`); // userId'yi kullanarak API isteği yap
+          const response = await axios.get(`http://127.0.0.1:5000/api/messages/search/${searchText || ''}/${user.userId}`); // userId'yi kullanarak API isteği yap
           const chatData = response.data.map(chat => ({
             ...chat,
-            pp: chat.profilePicture || defaultUserImage
+            pp: chat.profilePicture || defaultUserImage,
           }));
           setChats(chatData);
           setAllChats(chatData);
@@ -31,14 +31,14 @@ function Chats({ filter, searchText, onSelectChat }) {
     };
 
     fetchChats();
-  }, []); // Bu bağımlılık dizisi sadece bir kez çalışmasını sağlar
+  }, [searchText]); // searchText değiştiğinde yeniden çalıştır
 
   useEffect(() => {
     const newChats = filter
       ? allChats.filter(chat => chat.unreadMsgs)
-      : allChats.filter(chat => chat.messages.some(message => message.msg.toLowerCase().includes(searchText.toLowerCase())));
+      : allChats;
     setChats(newChats);
-  }, [filter, searchText, allChats]); // Bu bağımlılık dizisi bağımlı değişkenlere göre çalışmasını sağlar
+  }, [filter, allChats]);
 
   return (
     <div className='flex flex-col overflow-y-scroll cursor-pointer h-100'>
@@ -51,7 +51,7 @@ function Chats({ filter, searchText, onSelectChat }) {
         </div>
         <p className='text-emerald-500 text-xs font-light'>7</p>
       </div>
-      {allChats.map((chat, i) => {
+      {chats.map((chat, i) => {
         const lastMessage = chat.messages[chat.messages.length - 1];
         return (
           <Chat

@@ -3,7 +3,6 @@ const { default: mongoose } = require('mongoose');
 const Message = require('../models/Message');
 const User = require('../models/User');
 
-// Create a new message
 const createMessage = async (req, res) => {
     try {
         const { sender, receiver, msg } = req.body;
@@ -14,6 +13,49 @@ const createMessage = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+
+const searchMessages = async (req, res) => {
+    const { searchText, currentUserId } = req.params;
+  
+    if (typeof searchText !== 'string' || !mongoose.Types.ObjectId.isValid(currentUserId)) {
+      return res.status(400).json({ error: 'Geçersiz arama metni veya kullanıcı kimliği' });
+    }
+
+
+    try {
+      const messages = await Message.find({ msg: { $regex: new RegExp(searchText, 'i') } })
+        .populate('sender', 'username')
+        .populate('receiver', 'username');
+  
+      const formattedResults = messages.reduce((acc, msg) => {
+        const contactName = msg.receiver.username;
+        const message = {
+          messageId: msg._id,
+          msg: msg.msg,
+          time: msg.time,
+          sender: msg.sender._id.toString() === currentUserId ? 'me' : 'other',
+          receiverId: msg.receiver._id
+        };
+  
+        const contactIndex = acc.findIndex(contact => contact.contact === contactName);
+        if (contactIndex >= 0) {
+          acc[contactIndex].messages.push(message);
+        } else {
+          acc.push({
+            contact: contactName,
+            messages: [message]
+          });
+        }
+  
+        return acc;
+      }, []);
+  
+      res.json(formattedResults);
+    } catch (error) {
+      console.error('Error searching messages:', error);
+      res.status(500).json({ error: 'Mesaj arama hatası' });
+    }
+  };
 
 
 const getChatDetails = async (req, res) => {
@@ -139,5 +181,6 @@ module.exports = {
     createMessage,
     getAllUsersWithMessages,
     getChatDetails,
-    deleteMessage
+    deleteMessage,
+    searchMessages
 };
