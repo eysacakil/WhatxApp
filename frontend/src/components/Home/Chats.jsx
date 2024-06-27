@@ -19,6 +19,7 @@ function Chats({ filter, searchText, onSelectChat }) {
             ...chat,
             pp: chat.profilePicture || defaultUserImage
           }));
+          console.log('Chat data:', chatData);
           setChats(chatData);
           setAllChats(chatData);
           console.log('Chats fetched:', allChats);
