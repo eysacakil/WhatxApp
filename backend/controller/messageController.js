@@ -81,14 +81,14 @@ const getAllUsersWithMessages = async (req, res) => {
         const messages = await Message.find({
             $or: [
                 { sender: userId },
+                { receiver: userId }
             ]
         }).sort({ time: 1 }).populate('sender receiver', 'firstName lastName profilePicture');
 
-        // Kullanıcıları ve mesajları eşleştir
         const usersWithMessages = otherUsers.map(otherUser => {
             const userMessages = messages.filter(
-                message => (message.sender._id.toString() === otherUser._id.toString() && message.receiver._id.toString() === userId) ||
-                           (message.receiver._id.toString() === otherUser._id.toString() && message.sender._id.toString() === userId)
+                message => message.sender._id.toString() === otherUser._id.toString() ||
+                           message.receiver._id.toString() === otherUser._id.toString()
             );
 
             const formattedMessages = userMessages.map(message => ({
@@ -101,7 +101,7 @@ const getAllUsersWithMessages = async (req, res) => {
                 contact: `${otherUser.firstName} ${otherUser.lastName}`,
                 profilePicture: otherUser.profilePicture,
                 messages: formattedMessages,
-                unreadMsgs: userMessages.filter(m => m.receiver._id.toString() === userId && !m.read).length,
+                unreadMsgs: formattedMessages.length > 0 ? 0 : null,
                 receiverId: otherUser._id.toString()
             };
         });
@@ -111,7 +111,6 @@ const getAllUsersWithMessages = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
 
 const deleteMessage = async (req, res) => {
     try {
