@@ -35,17 +35,53 @@ function ProfileUpdate() {
     }
   };
 
-  const handleRemoveProfilePicture = () => {
+
+  const handleRemoveProfilePicture = async () => {
     setProfilePicture('');
+
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      const response = await axios.put(`http://localhost:5000/api/users/${user.userId}`, {
+        profilePicture: '',
+      });
+      setProfile(response.data);
+      setModalIsOpen(true);
+      setTimeout(() => {
+        setModalIsOpen(false);
+        navigate('/home');
+      }, 2000);
+    } catch (error) {
+      console.error('Error removing profile picture', error);
+      setErrorMessage('Profil resmi kaldırılırken bir hata oluştu.');
+    }
   };
 
   const handleSave = async () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    // Eğer profil resmi seçilmişse, önce resmi imgbb'ye yükleyin
+    let uploadedImageUrl = profilePicture;
+    if (profilePicture && profilePicture !== profile.profilePicture) {
+      try {
+        const imgAPIKey = '9aa32698e954bcfa705a6ce7bd865b6e';
+        const formData = new FormData();
+        formData.append('image', profilePicture.split(',')[1]); // Data URL'in base64 kısmını alın
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgAPIKey}`, {
+          method: 'POST',
+          body: formData,
+        });
+        const result = await response.json();
+        uploadedImageUrl = result.data.url;
+      } catch (error) {
+        console.error('Error uploading image', error);
+        setErrorMessage('Profil resmi yüklenirken bir hata oluştu.');
+        return;
+      }
+    }
+
     try {
-      const response = await axios.put('/api/profile/update', {
-        userId: profile._id,
-        firstName,
-        lastName,
-        profilePicture,
+      const response = await axios.put(`http://localhost:5000/api/users/${user.userId}`, {
+        profilePicture: uploadedImageUrl,
       });
       setProfile(response.data);
       setModalIsOpen(true);
@@ -85,20 +121,7 @@ function ProfileUpdate() {
             className='hidden'
           />
         </label>
-        <input
-          type="text"
-          placeholder="İsim"
-          value={firstName}
-          onChange={handleFirstNameChange}
-          className='mb-4 p-2 rounded-md bg-[#3b4a54] text-white w-full'
-        />
-        <input
-          type="text"
-          placeholder="Soyisim"
-          value={lastName}
-          onChange={handleLastNameChange}
-          className='mb-4 p-2 rounded-md bg-[#3b4a54] text-white w-full'
-        />
+        
         {errorMessage && <p className="text-sm text-red-600">{errorMessage}</p>}
         <button
           onClick={handleSave}

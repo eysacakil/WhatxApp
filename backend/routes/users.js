@@ -1,17 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const { registerUser,getAllUsers ,updateUser} = require('../controller/user-controller');
 
 // Kullanıcı kaydı
-router.post('/register', async (req, res) => {
-  const { firstName, lastName, username, email, password } = req.body;
-  try {
-    const newUser = new User({ firstName, lastName, username, email, password });
-    await newUser.save();
-    res.json(newUser);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
+router.post('/register', registerUser);
+router.get('/users', getAllUsers);
+router.put('/:userId', updateUser);
+
 
 module.exports = router;
