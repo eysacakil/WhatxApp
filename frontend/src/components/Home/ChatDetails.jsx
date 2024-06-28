@@ -9,23 +9,28 @@ import { BsFillMicFill } from "react-icons/bs";
 import EmptyChat from "./EmptyChat";
 import { getTime } from "../../logic/whatsapp";
 import { FaTrash } from "react-icons/fa";
+import EmojiPicker from "emoji-picker-react";
+
 
 function ChatDetails({ selectedChat }) {
   const [inputMessage, setInputMessage] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [text, setText] = useState("");
+  const [emoji, setEmoji] = useState()
   const [messages, setMessages] = useState([]);
   const [typingTimeout, setTypingTimeout] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const getChatDetails = async () => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const response = await axios.get(
-        `http://localhost:5000/api/messages/${user.userId}?contactId=${selectedChat.receiverId}`
+        `http://localhost:5000/api/messages/${user.userId}/${selectedChat.receiverId}`
       );
       console.log("getchatdetailsworked", response.data);
-      setMessages(response.data[0].messages);
+      setMessages(response.data.messages);
+      console.log(messages);
     } catch (error) {
       console.log("error happened on getting details", error);
     }
@@ -38,7 +43,7 @@ function ChatDetails({ selectedChat }) {
       getChatDetails();
       intervalId = setInterval(() => {
         getChatDetails();
-      }, 500); // 5 saniyede bir fetch yap
+      }, 1000); // 1 saniyede bir fetch yap
     };
 
     if (selectedChat) {
@@ -98,7 +103,7 @@ function ChatDetails({ selectedChat }) {
           message.msg.toLowerCase().includes(searchText)
         );
         setSearchResults(filteredMessages);
-      }, 500) // 500ms bekler
+      }, 1000) // 1 saniye bekler
     );
   }
 
@@ -201,7 +206,16 @@ function ChatDetails({ selectedChat }) {
       {/* Message Input Section */}
       <div className="flex items-center bg-[#202d33] w-full h-[70px] p-2">
         {/* Emoji Button */}
-        <RoundedBtn icon={<BiHappy />} />
+        <div className="relative">
+          <RoundedBtn icon={<BiHappy />} onClick={() => setShowEmojiPicker(!showEmojiPicker)} />
+          {showEmojiPicker && (
+            <div className="absolute bottom-[70px]">
+              <EmojiPicker onEmojiClick={(e)=>{
+                setInputMessage((prevInput) => prevInput + e.emoji)
+              }} />
+            </div>
+          )}
+        </div>
         <span className="mr-2">
           {/* Attach File Button */}
           <RoundedBtn icon={<AiOutlinePaperClip />} />

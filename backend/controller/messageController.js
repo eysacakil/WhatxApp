@@ -34,7 +34,6 @@ const searchMessages = async (req, res) => {
           msg: msg.msg,
           time: msg.time,
           sender: msg.sender._id.toString() === currentUserId ? 'me' : 'other',
-          receiverId: msg.receiver._id
         };
   
         const contactIndex = acc.findIndex(contact => contact.contact === contactName);
@@ -43,7 +42,8 @@ const searchMessages = async (req, res) => {
         } else {
           acc.push({
             contact: contactName,
-            messages: [message]
+            messages: [message],
+            receiverId: msg.receiver._id
           });
         }
   
@@ -58,48 +58,42 @@ const searchMessages = async (req, res) => {
   };
 
 
-const getChatDetails = async (req, res) => {
+  const getChatDetails = async (req, res) => {
     try {
-        const { userId } = req.params;
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+        const { userId, contactId } = req.params;
+
+        // İki kullanıcıyı tek sorgu ile al
+        const users = await User.find({ _id: { $in: [userId, contactId] } });
+
+        if (users.length !== 2) {
+            return res.status(404).json({ error: 'User or contact not found' });
         }
 
         const messages = await Message.find({
             $or: [
-                { sender: userId },
-                { receiver: userId }
+                { sender: userId, receiver: contactId },
+                { sender: contactId, receiver: userId }
             ]
         })
         .sort({ time: 1 })
         .populate('sender receiver', 'firstName email profilePicture');
 
-        const chats = {};
+        const contact = users.find(user => user._id.toString() === contactId);
 
-        messages.forEach(message => {
-            const receiverId = message.receiver._id.toString(); // Receiver ID'yi belirliyoruz
-            const contactId = message.sender._id.toString() === userId ? message.receiver._id.toString() : message.sender._id.toString();
-            const contactName = message.sender._id.toString() === userId ? message.receiver.firstName : message.sender.firstName;
-            const contactProfilePicture = message.sender._id.toString() === userId ? message.receiver.profilePicture : message.sender.profilePicture;
-            if (!chats[contactId]) {
-                chats[contactId] = {
-                    pp: contactProfilePicture,
-                    contact: contactName,
-                    messages: [],
-                    unreadMsgs: 0, 
-                    receiverId: receiverId // Receiver ID'yi ekliyoruz
-                };
-            }
-            chats[contactId].messages.push({
-                messageId: message._id, // Message ID'yi ekliyoruz
+        const chatDetails = {
+            pp: contact.profilePicture,
+            contact: contact.firstName,
+            messages: messages.map(message => ({
+                messageId: message._id,
                 msg: message.msg,
                 time: message.time,
                 sender: message.sender._id.toString() === userId ? 'me' : 'other'
-            });
-        });
+            })),
+            unreadMsgs: 0, 
+            receiverId: contactId
+        };
 
-        res.status(200).json(Object.values(chats));
+        res.status(200).json(chatDetails);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

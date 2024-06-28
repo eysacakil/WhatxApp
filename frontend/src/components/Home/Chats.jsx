@@ -10,18 +10,19 @@ function Chats({ filter, searchText, onSelectChat }) {
   const [allChats, setAllChats] = useState([]);
 
   useEffect(() => {
-    const fetchChats = async () => {
+    const fetchAllChats = async () => {
       const user = JSON.parse(localStorage.getItem('user')); // localStorage'dan kullanıcıyı al
       if (user && user.userId) {
         try {
-          const response = await axios.get(`http://127.0.0.1:5000/api/messages/search/${searchText || ''}/${user.userId}`); // userId'yi kullanarak API isteği yap
+          const response = await axios.get(`http://localhost:5000/api/messages/${user.userId}/users`); // userId'yi kullanarak API isteği yap
           const chatData = response.data.map(chat => ({
             ...chat,
             pp: chat.profilePicture || defaultUserImage,
           }));
           setChats(chatData);
+          console.log('Chats fetched:', chatData);
           setAllChats(chatData);
-          console.log('Chats fetched:', allChats);
+          console.log('Chats fetched:', chatData);
         } catch (error) {
           console.error('Error fetching chats:', error);
         }
@@ -30,7 +31,30 @@ function Chats({ filter, searchText, onSelectChat }) {
       }
     };
 
-    fetchChats();
+    fetchAllChats();
+  }, []); // Bu bağımlılık dizisi sadece bir kez çalışmasını sağlar
+
+  useEffect(() => {
+    const fetchSearchChats = async () => {
+      const user = JSON.parse(localStorage.getItem('user')); // localStorage'dan kullanıcıyı al
+      if (user && user.userId && searchText) {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/messages/search/${searchText}/${user.userId}`); // searchText ve userId'yi kullanarak API isteği yap
+          const chatData = response.data.map(chat => ({
+            ...chat,
+            pp: chat.profilePicture || defaultUserImage,
+          }));
+          setChats(chatData);
+          console.log('Search results fetched:', chatData);
+        } catch (error) {
+          console.error('Error fetching search results:', error);
+        }
+      } else if (!searchText) {
+        setChats(allChats); // Arama metni boşsa tüm sohbetleri göster
+      }
+    };
+
+    fetchSearchChats();
   }, [searchText]); // searchText değiştiğinde yeniden çalıştır
 
   useEffect(() => {
@@ -38,7 +62,7 @@ function Chats({ filter, searchText, onSelectChat }) {
       ? allChats.filter(chat => chat.unreadMsgs)
       : allChats;
     setChats(newChats);
-  }, [filter, allChats]);
+  }, [filter, allChats]); // filter veya allChats değiştiğinde yeniden çalıştır
 
   return (
     <div className='flex flex-col overflow-y-scroll cursor-pointer h-100'>
